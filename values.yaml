@@ -1,0 +1,27 @@
+
+application:
+  track: stable
+  tier: cron
+  migrateCommand:
+  initializeCommand:
+  secretName: 
+  secretChecksum:
+
+gitlab:
+  app:
+  env:
+  envName:
+  envURL:
+
+image:
+  repository: gitlab.example.com/group/project
+  tag: stable
+  pullPolicy: IfNotPresent
+  secrets:
+    - name: gitlab-registry
+
+schedule: "* * * * *"
+failedJobsHistoryLimit: 1
+successfulJobsHistoryLimit: 3
+concurrencyPolicy: Forbid
+restartPolicy: OnFailure
