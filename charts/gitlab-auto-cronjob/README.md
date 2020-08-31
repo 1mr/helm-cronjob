@@ -1,6 +1,6 @@
-# helm-gitlab-auto-cronjob
+# gitlab-auto-cronjob
 
-
+CronJob Chart
 
 ## gitlab-ci.yaml
 
@@ -22,8 +22,8 @@ variables:
   POSTGRES_ENABLED: "false"
   ROLLOUT_STATUS_DISABLED: "true"
   DOCKERFILE_PATH: .gitlab/Dockerfile
-  AUTO_DEVOPS_CHART_REPOSITORY: https://1mr.github.io/helm-gitlab-auto-cronjob
-  AUTO_DEVOPS_CHART_REPOSITORY_NAME: helm-gitlab-auto-cronjob
+  AUTO_DEVOPS_CHART_REPOSITORY: https://1mr.github.io/helm-charts
+  AUTO_DEVOPS_CHART_REPOSITORY_NAME: gitlab-auto-cronjob
 
 build:
   stage: build
