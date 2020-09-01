@@ -28,11 +28,11 @@ spec:
           - image: "{{ $.Values.image.repository }}:{{ $.Values.image.tag }}"
             imagePullPolicy: {{ $.Values.image.pullPolicy }}
             name: {{ template "appname" $ }}
-          {{- if $.Values.application.secretName }}
-          envFrom:
-          - secretRef:
-            name: {{ $.Values.application.secretName }}
-          {{- end }}
+            {{- if $.Values.application.secretName }}
+            envFrom:
+            - secretRef:
+                name: {{ $.Values.application.secretName }}
+            {{- end }}
             {{- if $.Values.command }}
             command: {{ $.Values.command }}
             {{- end }}

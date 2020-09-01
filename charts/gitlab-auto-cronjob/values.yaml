@@ -4,7 +4,7 @@ application:
   tier: cron
   migrateCommand:
   initializeCommand:
-  secretName: 
+  secretName: gitlab-secrets
   secretChecksum:
 
 gitlab:

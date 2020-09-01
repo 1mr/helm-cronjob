@@ -22,8 +22,9 @@ variables:
   POSTGRES_ENABLED: "false"
   ROLLOUT_STATUS_DISABLED: "true"
   DOCKERFILE_PATH: .gitlab/Dockerfile
+  AUTO_DEVOPS_CHART: 1mr/gitlab-auto-cronjob
   AUTO_DEVOPS_CHART_REPOSITORY: https://1mr.github.io/helm-charts
-  AUTO_DEVOPS_CHART_REPOSITORY_NAME: gitlab-auto-cronjob
+  AUTO_DEVOPS_CHART_REPOSITORY_NAME: 1mr
 
 build:
   stage: build
