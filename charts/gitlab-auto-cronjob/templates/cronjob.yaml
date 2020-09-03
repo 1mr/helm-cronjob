@@ -41,10 +41,10 @@ spec:
           - image: "{{ $.Values.image.repository }}:{{ $.Values.image.tag }}"
             imagePullPolicy: {{ $.Values.image.pullPolicy }}
             name: {{ template "appname" $ }}
-            {{- if $.Values.secretName }}
+            {{- if $.Values.application.secretName }}
             envFrom:
             - secretRef:
-                name: {{ $.Values.secretName }}
+                name: {{ $.Values.application.secretName }}
             {{- end }}
 {{- end }}
             {{- if $job.command }}
