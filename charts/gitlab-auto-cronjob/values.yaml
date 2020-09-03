@@ -1,4 +1,3 @@
-
 application:
   track: stable
   tier: cron
@@ -13,15 +12,40 @@ gitlab:
   envName:
   envURL:
 
-image:
-  repository: gitlab.example.com/group/project
-  tag: stable
-  pullPolicy: IfNotPresent
-  secrets:
-    - name: gitlab-registry
-
-schedule: "* * * * *"
-failedJobsHistoryLimit: 1
-successfulJobsHistoryLimit: 3
-concurrencyPolicy: Forbid
-restartPolicy: OnFailure
+jobs:
+  # first cron
+  - name: script1
+    image:
+      repository: gitlab.example.com/group/project
+      tag: stable
+      imagePullPolicy: IfNotPresent
+      secrets:
+        - name: gitlab-registry
+    schedule: "* * * * *"
+    failedJobsHistoryLimit: 1
+    successfulJobsHistoryLimit: 3
+    concurrencyPolicy: Allow
+    restartPolicy: OnFailure
+    secretName: gitlab-secrets
+  # second cron
+  - name: hello
+    image:
+      repository: ubuntu
+      tag: latest
+      imagePullPolicy: Always
+    schedule: "*/5 * * * *"
+    command: ["/bin/bash"]
+    args:
+      - "-c"
+      - "echo $(date) - hello from ubuntu"
+    resources:
+      limits:
+        cpu: 50m
+        memory: 256Mi
+      requests:
+        cpu: 50m
+        memory: 256Mi
+    failedJobsHistoryLimit: 1
+    successfulJobsHistoryLimit: 3
+    concurrencyPolicy: Forbid
+    restartPolicy: OnFailure

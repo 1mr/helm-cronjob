@@ -1,8 +1,8 @@
----
+{{- range $job := .Values.jobs }}
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: {{ template "fullname" $ }}
+  name: "{{ $job.name }}-{{ template "fullname" $ }}"
   annotations:
     {{ if $.Values.gitlab.app }}app.gitlab.com/app: {{ $.Values.gitlab.app | quote }}{{ end }}
     {{ if $.Values.gitlab.env }}app.gitlab.com/env: {{ $.Values.gitlab.env | quote }}{{ end }}
@@ -10,8 +10,8 @@ metadata:
     chart: "{{ $.Chart.Name }}-{{ $.Chart.Version | replace "+" "_" }}"
     release: {{ $.Release.Name }}
 spec:
-  concurrencyPolicy: {{ $.Values.concurrencyPolicy }}
-  failedJobsHistoryLimit: {{ $.Values.failedJobsHistoryLimit }}
+  concurrencyPolicy: {{ $job.concurrencyPolicy }}
+  failedJobsHistoryLimit: {{ $job.failedJobsHistoryLimit }}
   jobTemplate:
     spec:
       template:
@@ -20,50 +20,51 @@ spec:
             track: "{{ $.Values.application.track }}"
             tier: "{{ $.Values.application.tier }}"
             release: {{ $.Release.Name }}
-            cron: {{ $.Values.name }}
+            cron: {{ $job.name }}
         spec:
           imagePullSecrets:
-{{ toYaml $.Values.image.secrets | indent 12 }}
+{{ toYaml $job.image.secrets | indent 12 }}
           containers:
-          - image: "{{ $.Values.image.repository }}:{{ $.Values.image.tag }}"
-            imagePullPolicy: {{ $.Values.image.pullPolicy }}
+          - image: "{{ $job.image.repository }}:{{ $job.image.tag }}"
+            imagePullPolicy: {{ $job.image.pullPolicy }}
             name: {{ template "appname" $ }}
-            {{- if $.Values.application.secretName }}
+            {{- if $job.secretName }}
             envFrom:
             - secretRef:
-                name: {{ $.Values.application.secretName }}
+                name: {{ $job.secretName }}
             {{- end }}
-            {{- if $.Values.command }}
-            command: {{ $.Values.command }}
+            {{- if $job.command }}
+            command: {{ $job.command }}
             {{- end }}
-            {{- with $.Values.args }}
+            {{- with $job.args }}
             args:
 {{ toYaml . | indent 12 }}
               {{- end }}
-            {{- with $.Values.resources }}
+            {{- with $job.resources }}
             resources:
 {{ toYaml . | indent 14 }}
             {{- end }}
-            {{- with $.Values.volumeMounts }}
+            {{- with $job.volumeMounts }}
             volumeMounts:
 {{ toYaml . | indent 12 }}
             {{- end }}
-          {{- with $.Values.nodeSelector }}
+          {{- with $job.nodeSelector }}
           nodeSelector:
 {{ toYaml . | indent 12 }}
           {{- end }}
-          {{- with $.Values.affinity }}
+          {{- with $job.affinity }}
           affinity:
 {{ toYaml . | indent 12 }}
           {{- end }}
-          {{- with $.Values.tolerations }}
+          {{- with $job.tolerations }}
           tolerations:
 {{ toYaml . | indent 12 }}
           {{- end }}
-          restartPolicy: {{ $.Values.restartPolicy }}
-          {{- with $.Values.volumes }}
+          restartPolicy: {{ $job.restartPolicy }}
+          {{- with $job.volumes }}
           volumes:
 {{ toYaml . | indent 12 }}
           {{- end }}
-  schedule: {{ $.Values.schedule | quote }}
-  successfulJobsHistoryLimit: {{ $.Values.successfulJobsHistoryLimit }}
+  schedule: {{ $job.schedule | quote }}
+  successfulJobsHistoryLimit: {{ $job.successfulJobsHistoryLimit }}
+{{- end }}
