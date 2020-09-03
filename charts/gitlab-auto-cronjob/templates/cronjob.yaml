@@ -23,6 +23,7 @@ spec:
             cron: {{ $job.name }}
         spec:
           imagePullSecrets:
+{{- if $job.image }}
 {{ toYaml $job.image.secrets | indent 12 }}
           containers:
           - image: "{{ $job.image.repository }}:{{ $job.image.tag }}"
@@ -33,6 +34,18 @@ spec:
             - secretRef:
                 name: {{ $job.secretName }}
             {{- end }}
+{{- else }}
+{{ toYaml $.Values.image.secrets | indent 12 }}
+          containers:
+          - image: "{{ $.Values.image.repository }}:{{ $.Values.image.tag }}"
+            imagePullPolicy: {{ $.Values.image.pullPolicy }}
+            name: {{ template "appname" $ }}
+            {{- if $.Values.secretName }}
+            envFrom:
+            - secretRef:
+                name: {{ $.Values.secretName }}
+            {{- end }}
+{{- end }}
             {{- if $job.command }}
             command: {{ $job.command }}
             {{- end }}

@@ -12,15 +12,16 @@ gitlab:
   envName:
   envURL:
 
+image:
+  repository: gitlab.example.com/group/project
+  tag: stable
+  pullPolicy: IfNotPresent
+  secrets:
+    - name: gitlab-registry
+
 jobs:
   # first cron
   - name: script1
-    image:
-      repository: gitlab.example.com/group/project
-      tag: stable
-      imagePullPolicy: IfNotPresent
-      secrets:
-        - name: gitlab-registry
     schedule: "* * * * *"
     failedJobsHistoryLimit: 1
     successfulJobsHistoryLimit: 3
