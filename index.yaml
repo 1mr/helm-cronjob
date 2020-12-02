@@ -2,6 +2,14 @@ apiVersion: v1
 entries:
   gitlab-auto-cronjob:
   - apiVersion: v1
+    created: "2020-12-02T07:09:26.902458644Z"
+    description: Auto-deploy CRON Helm Chart
+    digest: eb333da5176cea14b6c4cd6fa4cde352d75aa514f8a69f1291120ba71704bbfe
+    name: gitlab-auto-cronjob
+    urls:
+    - https://github.com/1mr/helm-charts/releases/download/gitlab-auto-cronjob-0.0.8/gitlab-auto-cronjob-0.0.8.tgz
+    version: 0.0.8
+  - apiVersion: v1
     created: "2020-09-03T21:35:11.194201401Z"
     description: Auto-deploy CRON Helm Chart
     digest: 260a814372c8462c97b317ecb77b415235671b8aa17461ccedcdae57ef0259e3
