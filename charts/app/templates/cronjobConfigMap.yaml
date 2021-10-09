@@ -1,0 +1,15 @@
+{{- if .Values.cronjob }}
+{{- range $cronjob := .Values.cronjob }}
+{{- if $cronjob.env }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $cronjob.name }}
+  labels:
+    app.kubernetes.io/part-of: cronjob
+data:
+  {{ toYaml $cronjob.env | nindent 2 }}
+{{- end }}
+{{- end }}
+{{- end }}

@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "fullname" . }}
+  labels:
+    {{- include "labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type | default "ClusterIP" | quote }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.containerPort }}
+      protocol: TCP
+      name: {{ .Values.service.name | default "web" | quote }}
+    {{- if .Values.grpcService.enabled }}
+    - port: {{ .Values.grpcService.port }}
+      targetPort: {{ .Values.grpcService.containerPort }}
+      protocol: TCP
+      name: {{ .Values.grpcService.name | default "grpc" | quote }}
+    {{- end }}
+  selector:
+    {{- include "selectorLabels" . | nindent 4 }}

@@ -1,0 +1,69 @@
+{{- if and .Values.ingress.enabled -}}
+{{- $ingressApiIsStable := eq (include "ingress.isStable" .) "true" -}}
+{{- $ingressSupportsIngressClassName := eq (include "ingress.supportsIngressClassName" .) "true" -}}
+{{- $ingressSupportsPathType := eq (include "ingress.supportsPathType" .) "true" -}}
+apiVersion: {{ template "ingress.apiVersion" . }}
+kind: Ingress
+metadata:
+  name: {{ include "fullname" . }}
+  labels:
+    {{- include "labels" . | nindent 4 }}
+  annotations:
+{{- if .Values.ingress.annotations }}
+{{ toYaml .Values.ingress.annotations | indent 4 }}
+{{- end }}
+{{- with .Values.ingress.modSecurity }}
+{{- if .enabled }}
+    nginx.ingress.kubernetes.io/modsecurity-transaction-id: "$server_name-$request_id"
+    nginx.ingress.kubernetes.io/modsecurity-snippet: |
+      SecRuleEngine {{ .secRuleEngine | default "DetectionOnly" | title }}
+{{- range $rule := .secRules }}
+{{ (include "secrule" $rule) | indent 6 }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- if .Values.canary.nginx.enabled }}
+    nginx.ingress.kubernetes.io/canary: "true"
+    nginx.ingress.kubernetes.io/canary-by-cookie: {{ .Values.canary.nginx.cookie | default "canary" | quote }}
+    nginx.ingress.kubernetes.io/canary-by-header: {{ .Values.canary.nginx.header.name | default "x-canary" | quote }}
+    nginx.ingress.kubernetes.io/canary-by-header-value: {{ .Values.canary.nginx.header.value | default "always" | quote }}
+{{- end }}
+{{- if .Values.prometheus.metrics }}
+    nginx.ingress.kubernetes.io/server-snippet: |-
+      location /metrics {
+          deny all;
+      }
+
+{{- end }}
+spec:
+{{- if and .Values.ingress.tls.enabled .Values.ingress.hosts }}
+  tls:
+  - hosts:
+{{- range $host := .Values.ingress.hosts }}
+    - {{ template "hostname" $host }}
+{{- end }}
+    secretName: {{ .Values.ingress.tls.secretName | default (printf "%s-tls" (include "fullname" .)) }}
+{{- end }}
+  rules:
+{{- range $host := .Values.ingress.hosts }}
+  - host: {{ template "hostname" $host.host }}
+    http:
+      paths:
+{{- range $path := $host.paths }}
+      - path: {{ $path | default "/" }}
+        {{- if and $ingressSupportsPathType $.Values.ingress.pathType }}
+        pathType: {{ $.Values.ingress.pathType }}
+        {{- end }}
+        backend:
+        {{- if $ingressApiIsStable }}
+          service:
+            name: {{ default (include "fullname" $) $.Values.service.name }}
+            port:
+              number: {{ $.Values.service.port }}
+        {{- else }}
+          serviceName: {{ default (include "fullname" $) $.Values.service.name }}
+          servicePort: {{ $.Values.service.port }}
+        {{- end }}
+{{- end -}}
+{{- end -}}
+{{- end -}}

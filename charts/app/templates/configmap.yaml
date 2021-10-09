@@ -1,0 +1,12 @@
+{{- if .Values.application.env -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "fullname" . }}
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade,pre-rollback
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/resource-policy": keep
+data:
+  {{ toYaml .Values.application.env | nindent 2 }}
+{{- end }}

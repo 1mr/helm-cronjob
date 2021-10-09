@@ -1,0 +1,98 @@
+{{- if .Values.cronjob -}}
+{{- range $cronjob := .Values.cronjob }}
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: {{ $cronjob.name | trunc 63 | trimSuffix "-" }}
+  labels:
+    chart: "{{ $.Chart.Name }}-{{ $.Chart.Version | replace "+" "_" }}"
+    release: {{ $.Release.Name }}
+spec:
+  concurrencyPolicy: {{ $cronjob.concurrencyPolicy | default "Forbid" | quote }}
+  failedJobsHistoryLimit: {{ $cronjob.failedJobsHistoryLimit | default 5 }}
+  jobTemplate:
+    spec:
+      backoffLimit: {{ $cronjob.backoffLimit | default 1 }}
+      activeDeadlineSeconds: {{ $cronjob.activeDeadlineSeconds | default 60 }}
+      template:
+        metadata:
+          labels:
+            release: {{ $.Release.Name }}
+            cron: {{ $cronjob.name }}
+          annotations:
+          {{- if or $cronjob.env $.Values.application.env }}
+          {{- if $cronjob.env  }}
+            checksum/cronjobCM: {{ include (print $.Template.BasePath "/cronjobConfigMap.yaml") $ | sha256sum }}
+          {{- end }}
+          {{- if and $cronjob.useAppSecret $.Values.application.env }}
+            checksum/configmap: {{ include (print $.Template.BasePath "/configmap.yaml") $ | sha256sum }}
+          {{- end }}
+          {{- end }}
+          {{- with $cronjob.annotations }}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+        spec:
+          imagePullSecrets:
+          {{ toYaml $cronjob.imagePullSecrets | nindent 12 }}
+          containers:
+          - name: {{ default (include "fullname" $) $cronjob.name }}
+            image: {{ $cronjob.image | default $.Values.image | quote }}
+            imagePullPolicy: {{ $cronjob.imagePullPolicy | default "IfNotPresent" | quote }}
+            envFrom:
+            {{- if or $cronjob.secret $.Values.application.secret }}
+            {{- if and $cronjob.useAppSecret $.Values.application.secret }}
+            - secretRef:
+                name: {{ $.Values.application.secret }}
+            {{- end }}
+            {{- if $cronjob.secret }}
+            - secretRef:
+                name: {{ $cronjob.secret }}
+              {{- end }}
+              {{- end }}
+            {{- if or $cronjob.env $.Values.application.env }}
+            {{- if $cronjob.env  }}
+            - configMapRef:
+                name: {{ $cronjob.name }}
+            {{- end }}
+            {{- if and $cronjob.useAppEnv $.Values.application.env }}
+            - configMapRef:
+                name: {{ include "fullname" $ }}
+            {{- end }}
+            {{- end }}
+            {{- if $cronjob.command }}
+            command: {{ $cronjob.command }}
+            {{- end }}
+            {{- with $cronjob.args }}
+            args:
+              {{ toYaml . | nindent 14 }}
+            {{- end }}
+            {{- with $cronjob.resources }}
+            resources:
+              {{ toYaml . | nindent 14 }}
+            {{- end }}
+            {{- with $cronjob.volumeMounts }}
+            volumeMounts:
+              {{ toYaml . | nindent 14 }}
+            {{- end }}
+          {{- with $cronjob.nodeSelector }}
+          nodeSelector:
+            {{ toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with $cronjob.affinity }}
+          affinity:
+            {{ toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with $cronjob.tolerations }}
+          tolerations:
+            {{ toYaml . | nindent 12 }}
+          {{- end }}
+          restartPolicy: {{ $cronjob.restartPolicy | default "Never" | quote }}
+          {{- with $cronjob.volumes }}
+          volumes:
+            {{ toYaml . | nindent 12 }}
+          {{- end }}
+  schedule: {{ $cronjob.schedule | quote }}
+  successfulJobsHistoryLimit: {{ $cronjob.successfulJobsHistoryLimit | default 5 }}
+{{- end }}
+{{- end }}

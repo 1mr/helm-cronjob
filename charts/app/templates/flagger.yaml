@@ -1,0 +1,57 @@
+{{- if .Values.canary.flagger.enabled }}
+apiVersion: flagger.app/v1beta1
+kind: Canary
+metadata:
+  name: {{ include "fullname" . }}
+  labels:
+    {{- include "selectorLabels" . | nindent 4 }}
+spec:
+  revertOnDeletion: true
+  skipAnalysis: true
+  {{- if .Values.canary.flager.provider }}
+  provider: {{ .Values.canary.flager.provider }}
+  {{- end }}
+  ingressRef:
+    apiVersion: networking.k8s.io/v1beta1
+    kind: Ingress
+    name: {{ include "fullname" . }}
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name:  {{ include "fullname" . }}
+  {{- if .Values.autoscaling.enabled }}
+  autoscalerRef:
+    apiVersion: autoscaling/v2beta1
+    kind: HorizontalPodAutoscaler
+    name:  {{ include "fullname" . }}
+  {{- end }}
+  service:
+    port: {{ .Values.service.port }}
+    targetPort: {{ .Values.service.containerPort }}
+    portDiscovery: true
+  analysis:
+    interval: {{ .Values.canary.flagger.analysis.interval | default "1m" }}
+    threshold: {{ .Values.canary.flagger.analysis.threshold | default "10" }}
+    maxWeight: {{ .Values.canary.flagger.analysis.maxWeight | default "100" }}
+    stepWeight: {{ .Values.canary.flagger.analysis.stepWeight | default "10" }}
+    {{- with .Values.canary.match }}
+    match:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+    metrics:
+    {{- if not .Values.canary.metrics }}
+    - name: request-success-rate
+      threshold: {{ .Values.canary.flagger.thresholds.successRate | default "99" }}
+      interval: {{ .Values.canary.flagger.thresholds.interval | default "1m" }}
+    - name: request-duration
+      threshold: {{ .Values.canary.flagger.thresholds.latency | default "500" }}
+      interval: {{ .Values.canary.flagger.thresholds.interval | default "1m" }}
+    {{- end }}
+    {{- with .Values.canary.flagger.metrics }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+    {{- with .Values.canary.flagger.webhooks }}
+    webhooks:
+      {{- toYaml . | nindent 8 }}
+    {{- end }}
+{{- end }}

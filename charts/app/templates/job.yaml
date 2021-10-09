@@ -1,0 +1,91 @@
+{{- if .Values.job -}}
+{{- range $job := .Values.job }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ $job.name | trunc 63 | trimSuffix "-" }}
+  labels:
+    chart: "{{ $.Chart.Name }}-{{ $.Chart.Version | replace "+" "_" }}"
+    release: {{ $.Release.Name }}
+  annotations:
+  {{- with $job.metaAnnotations }}
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  completions: {{ $job.completions }}
+  parallelism: {{ $job.parallelism }}
+  activeDeadlineSeconds: {{ $job.activeDeadlineSeconds | default 300 }}
+  backoffLimit: {{ $job.backoffLimit | default 0 }}
+  template:
+    metadata:
+      annotations:
+      {{- if $job.env }}
+        checksum/jobconfigmap: {{ include (print $.Template.BasePath "/jobConfigMap.yaml") $ | sha256sum }}
+      {{- end }}
+      {{- if and $job.useAppEnv $.Values.application.env }}
+        checksum/configmap: {{ include (print $.Template.BasePath "/configmap.yaml") $ | sha256sum }}
+      {{- end }}
+      {{- with $job.annotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    spec:
+      imagePullSecrets:
+      {{ toYaml $job.imagePullSecrets | nindent 8 }}
+      restartPolicy: {{ $job.restartPolicy | default "Never" | quote }}
+      containers:
+      - name: {{ template "name" $ }}
+        image: {{ $job.image | default $.Values.image | quote }}
+        imagePullPolicy: {{ $job.imagePullPolicy | default "IfNotPresent" | quote }}
+        envFrom:
+        {{- if or $job.secret $.Values.application.secret }}
+        {{- if and $job.useAppSecret $.Values.application.secret }}
+        - secretRef:
+            name: {{ $.Values.application.secret }}
+        {{- end }}
+        {{- if $job.secret }}
+        - secretRef:
+            name: {{ $job.secret }}
+        {{- end }}
+        {{- end }}
+        {{- if and $job.useAppEnv $.Values.application.env }}
+        - configMapRef:
+            name: {{ include "fullname" $ }}
+        {{- end }}
+        {{- if $job.env  }}
+        - configMapRef:
+            name: {{ $job.name }}
+        {{- end }}
+        {{- if $job.command }}
+        command: {{ $job.command }}
+        {{- end }}
+        {{- with $job.args }}
+        args:
+          {{ toYaml . | nindent 10 }}
+        {{- end }}
+        {{- with $job.resources }}
+        resources:
+          {{ toYaml . | nindent 10 }}
+        {{- end }}
+        {{- with $job.volumeMounts }}
+        volumeMounts:
+          {{ toYaml . | nindent 10 }}
+        {{- end }}
+        {{- with $job.nodeSelector }}
+        nodeSelector:
+          {{ toYaml . | nindent 10 }}
+        {{- end }}
+        {{- with $job.affinity }}
+        affinity:
+          {{ toYaml . | nindent 10 }}
+        {{- end }}
+        {{- with $job.tolerations }}
+        tolerations:
+          {{ toYaml . | nindent 10 }}
+        {{- end }}
+        {{- with $job.volumes }}
+        volumes:
+          {{ toYaml . | nindent 10 }}
+        {{- end }}
+{{- end }}
+{{- end }}
