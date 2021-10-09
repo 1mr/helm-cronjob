@@ -13,7 +13,7 @@ application:
     NODE_ENV: "production"
     TZ: "UTC"
     LOG_LEVEL: "INFO"
-    HTTP_PORT: "3000"
+    PORT: "3000"
 
 service:
   type: ClusterIP
