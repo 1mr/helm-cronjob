@@ -1,11 +1,6 @@
 name: Lint
 
 on:
-  push:
-    branches:
-      - master
-    paths:
-      - 'charts/**'
   pull_request:
     paths:
       - 'charts/**'
