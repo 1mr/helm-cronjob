@@ -3,6 +3,15 @@ entries:
   app:
   - apiVersion: v2
     appVersion: "1.0"
+    created: "2021-10-09T10:16:35.824683353Z"
+    description: App Helm chart for Kubernetes
+    digest: 11a17465c9a65d8ed0edeab997d4c0045afa9d472f316ac633fbdbcf8b7700b0
+    name: app
+    urls:
+    - https://github.com/1mr/helm-charts/releases/download/app-0.1.2/app-0.1.2.tgz
+    version: 0.1.2
+  - apiVersion: v2
+    appVersion: "1.0"
     created: "2021-10-09T09:41:36.456127027Z"
     description: App Helm chart for Kubernetes
     digest: 40c1fb540bc2f0dfdda0e6b67d9b249917e5666159a24d2828fe3fd0b5199f02
@@ -76,4 +85,4 @@ entries:
     urls:
     - https://github.com/1mr/helm-charts/releases/download/gitlab-auto-cronjob-0.0.2/gitlab-auto-cronjob-0.0.2.tgz
     version: 0.0.2
-generated: "2021-10-09T09:41:36.456149227Z"
+generated: "2021-10-09T10:16:35.824707854Z"
