@@ -3,6 +3,15 @@ entries:
   app:
   - apiVersion: v2
     appVersion: "1.0"
+    created: "2021-11-20T17:31:35.234948949Z"
+    description: App Helm chart for Kubernetes
+    digest: c83b85ede32115a09e0d88924129ad535b4021c2a6a9e1a474879c1f05e082e2
+    name: app
+    urls:
+    - https://github.com/1mr/helm-charts/releases/download/app-0.1.3/app-0.1.3.tgz
+    version: 0.1.3
+  - apiVersion: v2
+    appVersion: "1.0"
     created: "2021-10-09T10:16:35.824683353Z"
     description: App Helm chart for Kubernetes
     digest: 11a17465c9a65d8ed0edeab997d4c0045afa9d472f316ac633fbdbcf8b7700b0
@@ -85,4 +94,14 @@ entries:
     urls:
     - https://github.com/1mr/helm-charts/releases/download/gitlab-auto-cronjob-0.0.2/gitlab-auto-cronjob-0.0.2.tgz
     version: 0.0.2
-generated: "2021-10-09T10:16:35.824707854Z"
+  promxy:
+  - apiVersion: v2
+    appVersion: 0.0.75
+    created: "2021-11-20T17:31:35.308843787Z"
+    description: promxy
+    digest: 74d98210ea829251a347259669c275123469a571071587c38a37734b77632300
+    name: promxy
+    urls:
+    - https://github.com/1mr/helm-charts/releases/download/promxy-0.1.0/promxy-0.1.0.tgz
+    version: 0.1.0
+generated: "2021-11-20T17:31:35.309088589Z"
