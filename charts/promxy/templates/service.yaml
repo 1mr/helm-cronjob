@@ -1,0 +1,21 @@
+{{- if .Values.service.enabled  }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ default (include "fullname" .) .Values.service.name }}
+  labels:
+    {{- include "labels" . | nindent 4 }}
+  annotations:
+    {{- range $key, $value := .Values.service.annotations }}
+      {{ $key }}: {{ $value | quote }}
+    {{- end }}
+spec:
+  type: {{ .Values.service.type | default "ClusterIP" }}
+  selector:
+    {{- include "selectorLabels" . | nindent 6 }}
+  ports:
+    - port: {{ .Values.service.servicePort | default 80 }}
+      targetPort: {{ .Values.service.containerPort | default 8083 }}
+      protocol: TCP
+      name: http
+{{- end }}

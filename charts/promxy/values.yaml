@@ -1,0 +1,55 @@
+image:
+  repository: quay.io/jacksontj/promxy
+  tag: v0.0.75
+
+replicaCount: 2
+
+extra_args:
+  log-level: info
+
+serviceAccount:
+  create: true
+
+service:
+  enabled: true
+
+securityContext:
+  runAsNonRoot: true
+
+podSecurityContext:
+  allowPrivilegeEscalation: false
+  runAsNonRoot: true
+  capabilities:
+    drop:
+      - all
+
+resources:
+  limits:
+    memory: 100Mi
+    cpu: 200m
+  requests:
+    memory: 50Mi
+    cpu: 50m
+
+config:
+  global:
+    evaluation_interval: 5s
+    external_labels:
+      source: promxy
+
+  promxy:
+    server_groups:
+      - static_configs:
+          - targets:
+            - vmselect-az-b.victoria-metrics.svc.cluster.local:8481
+            - vmselect-az-d.victoria-metrics.svc.cluster.local:8481
+        scheme: http
+        anti_affinity: 10s
+        # remote_read: false
+        path_prefix: /select/0/prometheus/
+        query_params:
+          nocache: 1
+        http_client:
+          dial_timeout: 1s
+          tls_config:
+            insecure_skip_verify: true
