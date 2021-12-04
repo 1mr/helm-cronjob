@@ -40,7 +40,6 @@ jobs:
         run: ct lint
 
   release:
-    if: ${{ !env.ACT }}
     needs: lint
     runs-on: ubuntu-latest
     steps:
@@ -60,6 +59,7 @@ jobs:
           version: v3.7.1
 
       - name: Run chart-releaser
+        if: ${{ !env.ACT }}
         uses: helm/chart-releaser-action@v1.2.1
         env:
           CR_TOKEN: "${{ secrets.CR_TOKEN }}"
