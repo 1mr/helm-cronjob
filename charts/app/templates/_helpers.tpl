@@ -33,23 +33,20 @@ Create chart name and version as used by the chart label.
 Common labels
 */}}
 {{- define "labels" -}}
+helm.sh/chart: {{ include "chart" . }}
 {{ include "selectorLabels" . }}
-release: {{ .Release.Name }}
-heritage: {{ .Release.Service }}
-helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version| replace "+" "_" }}"
-{{- if .Chart.AppVersion }}
-app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- if or .Chart.AppVersion .Values.image.tag }}
+app.kubernetes.io/version: {{ .Values.image.tag | default .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
 
 {{/*
 Selector labels
-app.kubernetes.io/name: {{ include "fullname" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
 */}}
 {{- define "selectorLabels" -}}
-app: {{ template "fullname" . }}
+app.kubernetes.io/name: {{ include "name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
@@ -85,7 +82,6 @@ Set image as requirement
 {{- define "image" -}}
 {{ required "No image provided" .image }}
 {{- end -}}
-
 
 
 {{/*
