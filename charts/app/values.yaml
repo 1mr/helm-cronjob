@@ -1,7 +1,7 @@
 # -- Image to use for deploying
 image:
-  repository: ""
-  tag: latest
+  repository: 1am3r/hello-world-koa
+  tag: v.0.1
 imagePullSecrets: []
 
 # -- Name Ovverride

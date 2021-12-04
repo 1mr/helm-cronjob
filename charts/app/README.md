@@ -77,7 +77,7 @@ Change the values according to the need of the environment in ``values.yaml`` fi
 | grpcService.containerPort | int | `50051` |  |
 | grpcService.enabled | bool | `false` |  |
 | grpcService.port | int | `40000` |  |
-| image | object | `{"repository":"","tag":"latest"}` | Image to use for deploying |
+| image | object | `{"repository":"1am3r/hello-world-koa","tag":"v.0.1"}` | Image to use for deploying |
 | imagePullSecrets | list | `[]` |  |
 | ingress.annotations."kubernetes.io/ingress.class" | string | `"nginx"` |  |
 | ingress.annotations."kubernetes.io/tls-acme" | string | `"false"` |  |
