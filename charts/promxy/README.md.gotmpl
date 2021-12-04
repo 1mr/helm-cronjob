@@ -1,0 +1,58 @@
+# promxy
+
+{{ template "chart.description" . }}
+
+## Prerequisites
+
+* Install the follow packages: ``git``, ``kubectl``, ``helm``, ``sops``, ``helm-docs``. See this [tutorial](../../REQUIREMENTS.md).
+
+## How to install
+
+Add repo:
+
+```console
+helm repo add 1mr https://charts.1mr.me
+helm repo update
+```
+
+Test the installation with command:
+
+```console
+helm -n NAMESAPCE install promxy 1mr/promxy -f values.yaml --debug --dry-run
+```
+
+Install chart with command:
+
+```console
+helm -n NAMESAPCE install promxy 1mr/promxy -f values.yaml
+```
+
+## How to uninstall
+
+Remove application with command.
+
+```console
+helm -n NAMESAPCE uninstall promxy -n NAMESPACE
+```
+
+## Documentation of Helm Chart
+
+Install ``helm-docs``.
+
+Generate docs with ``helm-docs`` command.
+
+```bash
+cd charts/promxy
+
+helm-docs
+```
+
+The markdown generation is entirely go template driven. The tool parses metadata from charts and generates a number of sub-templates that can be referenced in a template file (by default ``README.md.gotmpl``). If no template file is provided, the tool has a default internal template that will generate a reasonably formatted README.
+
+## Parameters
+
+The following tables lists the configurable parameters of the chart and their default values.
+
+Change the values according to the need of the environment in ``values.yaml`` file.
+
+{{ template "chart.valuesTable" . }}
