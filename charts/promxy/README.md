@@ -70,9 +70,11 @@ Change the values according to the need of the environment in ``values.yaml`` fi
 | extra_args.log-level | string | `"info"` |  |
 | image.repository | string | `"quay.io/jacksontj/promxy"` |  |
 | image.tag | string | `"v0.0.75"` |  |
+| livenessProbe | object | `{}` |  |
 | podSecurityContext.allowPrivilegeEscalation | bool | `false` |  |
 | podSecurityContext.capabilities.drop[0] | string | `"all"` |  |
 | podSecurityContext.runAsNonRoot | bool | `true` |  |
+| readinessProbe | object | `{}` |  |
 | replicaCount | int | `2` |  |
 | resources.limits.cpu | string | `"200m"` |  |
 | resources.limits.memory | string | `"100Mi"` |  |
