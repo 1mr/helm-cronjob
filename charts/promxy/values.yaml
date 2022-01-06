@@ -10,6 +10,9 @@ extra_args:
 serviceAccount:
   create: true
 
+livenessProbe: {}
+readinessProbe: {}
+
 service:
   enabled: true
 
