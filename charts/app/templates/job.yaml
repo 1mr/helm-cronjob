@@ -35,7 +35,7 @@ spec:
       restartPolicy: {{ $job.restartPolicy | default "Never" | quote }}
       containers:
       - name: {{ template "name" $ }}
-        image: "{{ $job.image.repository | default $.Values.image.repository | quote }}:{{ $job.image.tag | default $.Values.image.tag | quote }}"
+        image: "{{ default $.Values.image.repository $cronjob.image.repository }}:{{ default $.Values.image.tag }}"
         imagePullPolicy: {{ $job.imagePullPolicy | default "IfNotPresent" | quote }}
         envFrom:
         {{- if or $job.secret $.Values.application.secret }}
