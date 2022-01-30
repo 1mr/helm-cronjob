@@ -35,7 +35,7 @@ spec:
       restartPolicy: {{ $job.restartPolicy | default "Never" | quote }}
       containers:
       - name: {{ template "name" $ }}
-        {{- if $job.image.repository }}
+        {{- if $job.image }}
         image: "{{ $job.image.repository }}:{{ $job.image.tag }}"
         {{- else }}
         image: "{{ $.Values.image.repository }}:{{ $.Values.image.tag }}"
