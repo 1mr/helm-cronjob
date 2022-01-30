@@ -3,6 +3,17 @@ entries:
   app:
   - apiVersion: v2
     appVersion: "1.0"
+    created: "2022-01-30T11:42:17.153217677Z"
+    description: App Helm chart for Kubernetes
+    digest: 7f628a30fd35dd00770213515a402219a822250690d6d1ad030603590ca20817
+    maintainers:
+    - name: 1mr
+    name: app
+    urls:
+    - https://github.com/1mr/helm-charts/releases/download/app-0.1.10/app-0.1.10.tgz
+    version: 0.1.10
+  - apiVersion: v2
+    appVersion: "1.0"
     created: "2022-01-30T11:18:20.747182101Z"
     description: App Helm chart for Kubernetes
     digest: 4ec1662f01228af4be91e6e8619338da31db4ce5020a652b4ddabf227e7d2258
@@ -192,4 +203,4 @@ entries:
     urls:
     - https://github.com/1mr/helm-charts/releases/download/promxy-0.1.0/promxy-0.1.0.tgz
     version: 0.1.0
-generated: "2022-01-30T11:18:20.747392805Z"
+generated: "2022-01-30T11:42:17.153323477Z"
