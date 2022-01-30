@@ -37,7 +37,7 @@ spec:
           {{ toYaml $cronjob.imagePullSecrets | nindent 12 }}
           containers:
           - name: {{ default (include "fullname" $) $cronjob.name }}
-            image: {{ $cronjob.image | default $.Values.image | quote }}
+            image: "{{ $cronjob.image.repository | default $.Values.image.repository | quote }}:{{ $cronjob.image.tag | default $.Values.image.tag | quote }}"
             imagePullPolicy: {{ $cronjob.imagePullPolicy | default "IfNotPresent" | quote }}
             envFrom:
             {{- if or $cronjob.secret $.Values.application.secret }}
