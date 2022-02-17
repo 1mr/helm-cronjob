@@ -16,12 +16,12 @@ readinessProbe: {}
 service:
   enabled: true
 
-securityContext:
-  runAsNonRoot: true
+securityContext: {}
+  # runAsNonRoot: true
 
 podSecurityContext:
-  allowPrivilegeEscalation: false
-  runAsNonRoot: true
+  # allowPrivilegeEscalation: false
+  # runAsNonRoot: true
   capabilities:
     drop:
       - all
