@@ -207,6 +207,17 @@ entries:
   promxy:
   - apiVersion: v2
     appVersion: 0.0.75
+    created: "2022-02-17T12:30:16.286379052Z"
+    description: promxy
+    digest: f59e4e6633c37388900c1d63e7a571cfbbbf84633b9e80bf32d3c002a7335c9a
+    maintainers:
+    - name: 1mr
+    name: promxy
+    urls:
+    - https://github.com/1mr/helm-charts/releases/download/promxy-0.1.5/promxy-0.1.5.tgz
+    version: 0.1.5
+  - apiVersion: v2
+    appVersion: 0.0.75
     created: "2022-01-06T12:54:06.82379685Z"
     description: promxy
     digest: 69381f2ce4ce5ef8c5f4ab888d58a38caa32ade4e913c135d0bf1899c2369cee
@@ -247,4 +258,4 @@ entries:
     urls:
     - https://github.com/1mr/helm-charts/releases/download/promxy-0.1.0/promxy-0.1.0.tgz
     version: 0.1.0
-generated: "2022-01-30T12:03:56.385648374Z"
+generated: "2022-02-17T12:30:16.286471953Z"
