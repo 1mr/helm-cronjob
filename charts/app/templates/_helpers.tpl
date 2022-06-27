@@ -124,3 +124,38 @@ Return if ingress supports pathType.
 {{- define "ingress.supportsPathType" -}}
   {{- or (eq (include "ingress.isStable" .) "true") (and (eq (include "ingress.apiVersion" .) "networking.k8s.io/v1beta1") (semverCompare ">= 1.18.x" (include "kubeVersion" .))) -}}
 {{- end -}}
+
+{{/*
+Return the appropriate apiVersion for autoscaling.
+*/}}
+{{- define "autoscaling.apiVersion" -}}
+  {{- if and (.Capabilities.APIVersions.Has "autoscaling/v2") (semverCompare ">= 1.22.x" (include "kubeVersion" .)) -}}
+      {{- print "autoscaling/v2" -}}
+  {{- else if .Capabilities.APIVersions.Has "autoscaling/v2beta2" -}}
+    {{- print "autoscaling/v2beta2" -}}
+  {{- else -}}
+    {{- print "autoscaling/v2beta1" -}}
+  {{- end -}}
+{{- end -}}
+
+{{/*
+Return the appropriate apiVersion for cron.
+*/}}
+{{- define "cronjobs.apiVersion" -}}
+  {{- if and (.Capabilities.APIVersions.Has "batch/v1") (semverCompare ">= 1.21.x" (include "kubeVersion" .)) -}}
+      {{- print "batch/v1" -}}
+  {{- else -}}
+    {{- print "batch/v1beta1" -}}
+  {{- end -}}
+{{- end -}}
+
+{{/*
+Return the appropriate apiVersion for PodDisruptionBudget.
+*/}}
+{{- define "podDisruptionBudget.apiVersion" -}}
+  {{- if and (.Capabilities.APIVersions.Has "policy/v1") (semverCompare ">= 1.21.x" (include "kubeVersion" .)) -}}
+      {{- print "policy/v1" -}}
+  {{- else -}}
+    {{- print "policy/v1beta1" -}}
+  {{- end -}}
+{{- end -}}

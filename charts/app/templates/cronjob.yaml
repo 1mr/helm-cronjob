@@ -1,7 +1,7 @@
 {{- if .Values.cronjob -}}
 {{- range $cronjob := .Values.cronjob }}
 ---
-apiVersion: batch/v1beta1
+apiVersion: {{ template "cronjobs.apiVersion" $ }}
 kind: CronJob
 metadata:
   name: {{ $cronjob.name | trunc 63 | trimSuffix "-" }}
@@ -9,6 +9,7 @@ metadata:
     chart: "{{ $.Chart.Name }}-{{ $.Chart.Version | replace "+" "_" }}"
     release: {{ $.Release.Name }}
 spec:
+  suspend: {{ $cronjob.suspend }}
   concurrencyPolicy: {{ $cronjob.concurrencyPolicy | default "Forbid" | quote }}
   failedJobsHistoryLimit: {{ $cronjob.failedJobsHistoryLimit | default 5 }}
   jobTemplate:
@@ -37,12 +38,16 @@ spec:
           {{ toYaml $cronjob.imagePullSecrets | nindent 12 }}
           containers:
           - name: {{ default (include "fullname" $) $cronjob.name }}
-            {{- if and $cronjob.image }}
+            {{- if $cronjob.image }}
             image: "{{ $cronjob.image.repository }}:{{ $cronjob.image.tag }}"
             {{- else }}
             image: "{{ $.Values.image.repository }}:{{ $.Values.image.tag }}"
             {{- end }}
             imagePullPolicy: {{ $cronjob.imagePullPolicy | default "IfNotPresent" | quote }}
+            {{- if $cronjob.lifecycle }}
+            lifecycle:
+              {{- toYaml $cronjob.lifecycle | nindent 14 }}
+            {{- end }}
             envFrom:
             {{- if or $cronjob.secret $.Values.application.secret }}
             {{- if and $cronjob.useAppSecret $.Values.application.secret }}

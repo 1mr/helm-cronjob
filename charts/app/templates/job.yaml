@@ -13,6 +13,7 @@ metadata:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
+  suspend: {{ $job.suspend }}
   completions: {{ $job.completions }}
   parallelism: {{ $job.parallelism }}
   activeDeadlineSeconds: {{ $job.activeDeadlineSeconds | default 300 }}

@@ -1,3 +1,4 @@
+{{- if .Values.service.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -101,7 +102,7 @@ spec:
             httpGet:
               path: {{ .Values.livenessProbe.path }}
               scheme: HTTP
-              port: {{  default .Values.service.containerPort .Values.livenessProbe.port }}
+              port: {{ default .Values.service.containerPort .Values.livenessProbe.port }}
             {{- end }}
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
@@ -133,6 +134,116 @@ spec:
           {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+      {{- if .Values.extraContainer }}
+      {{- range $extraContainer := .Values.extraContainer }}
+        - name: {{ $extraContainer.name | default "container" }}
+          securityContext:
+             {{- toYaml $extraContainer.podSecurityContext | nindent 12 }}
+          image: "{{ $extraContainer.image.repository }}:{{ $extraContainer.image.tag }}"
+          imagePullPolicy: {{ $extraContainer.imagepullPolicy | default "IfNotPresent" | quote }}
+          {{- with $extraContainer.command }}
+          command:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- if $extraContainer.lifecycle }}
+          lifecycle:
+            {{- toYaml $extraContainer.lifecycle | nindent 12 }}
+          {{- end }}
+          envFrom:
+          {{- if or $extraContainer.secret $.Values.application.secret }}
+          {{- if and $extraContainer.useAppSecret $.Values.application.secret }}
+          - secretRef:
+            name: {{ $.Values.application.secret }}
+          {{- end }}
+          {{- if $extraContainer.secret }}
+          - secretRef:
+            name: {{ $extraContainer.secret }}
+          {{- end }}
+          {{- end }}
+          {{- if and $extraContainer.useAppEnv $.Values.application.env }}
+          - configMapRef:
+              name: {{ include "fullname" $ }}
+          {{- end }}
+          {{- if $extraContainer.env }}
+          - configMapRef:
+              name: {{ nospace (cat (include "fullname" $) "-" $extraContainer.name) }}
+          {{- end }}
+          {{- if $extraContainer.service }}
+          {{- if $extraContainer.service.containerPort }}
+          ports:
+          - name: {{ default $extraContainer.name $extraContainer.service.name | quote }}
+            containerPort: {{ $extraContainer.service.containerPort }}
+          {{- end }}
+          {{- end }}
+          {{- if $extraContainer.startupProbe }}
+          startupProbe:
+          {{- if eq $extraContainer.startupProbe.type "tcpSocket" }}
+            tcpSocket:
+              port: {{ $extraContainer.service.containerPort $extraContainer.startupProbe.port }}
+          {{- else if eq $extraContainer.startupProbe.type "exec" }}
+            exec:
+              command:
+              {{ toYaml $extraContainer.startupProbe.command | nindent 14 }}
+          {{- else if $extraContainer.startupProbe }}
+            httpGet:
+              path: {{ $extraContainer.startupProbe.path }}
+              scheme: HTTP
+              port: {{ default $extraContainer.service.containerPort $extraContainer.startupProbe.port }}
+          {{- end }}
+            initialDelaySeconds: {{ $extraContainer.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ $extraContainer.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ $extraContainer.startupProbe.timeoutSeconds }}
+            successThreshold: {{ $extraContainer.startupProbe.successThreshold }}
+            failureThreshold: {{ $extraContainer.startupProbe.failureThreshold }}
+          {{- end }}
+          {{- if $extraContainer.livenessProbe }}
+          livenessProbe:
+            {{- if $extraContainer.livenessProbe.type }}
+            {{- if eq $extraContainer.livenessProbe.type "exec" }}
+            exec:
+              command:
+              {{ toYaml $extraContainer.livenessProbe.command | nindent 14 }}
+            {{- end }}
+            {{- else }}
+            httpGet:
+              path: {{ $extraContainer.livenessProbe.path }}
+              scheme: HTTP
+              port: {{ default $extraContainer.service.containerPort $extraContainer.livenessProbe.port }}
+            {{- end }}
+            initialDelaySeconds: {{ $extraContainer.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ $extraContainer.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ $extraContainer.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ $extraContainer.livenessProbe.successThreshold }}
+            failureThreshold: {{ $extraContainer.livenessProbe.failureThreshold }}
+          {{- end }}
+          {{- if $extraContainer.readinessProbe }}
+          readinessProbe:
+            {{- if $extraContainer.readinessProbe.type }}
+            {{- if eq $extraContainer.readinessProbe.type "exec" }}
+            exec:
+              command:
+              {{ toYaml $extraContainer.readinessProbe.command | nindent 14 }}
+            {{- end }}
+            {{- else }}
+            httpGet:
+              path: {{ $extraContainer.readinessProbe.path }}
+              scheme: HTTP
+              port: {{ default $extraContainer.service.containerPort $extraContainer.readinessProbe.port }}
+            {{- end }}
+            initialDelaySeconds: {{ $extraContainer.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ $extraContainer.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ $extraContainer.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ $extraContainer.readinessProbe.successThreshold }}
+            failureThreshold: {{ $extraContainer.readinessProbe.failureThreshold }}
+          {{- end }}
+          {{- with $extraContainer.volumeMounts }}
+          volumeMounts:
+            {{ toYaml . | nindent 12 }}
+          {{- end }}
+          resources:
+            {{- toYaml $extraContainer.resources | nindent 12 }}
+      {{- end }}
+      {{- end }}
       {{- with .Values.volumes }}
       volumes:
         {{ toYaml . | nindent 8 }}
@@ -162,3 +273,4 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+{{- end }}
