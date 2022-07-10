@@ -117,6 +117,7 @@ Change the values according to the need of the environment in ``values.yaml`` fi
 | service.port | int | `80` |  |
 | service.type | string | `"ClusterIP"` |  |
 | serviceAccount.annotations | object | `{}` |  |
-| serviceAccount.create | bool | `true` |  |
+| serviceAccount.autoMountServiceAccountToken | bool | `false` |  |
+| serviceAccount.create | bool | `false` |  |
 | serviceAccount.name | string | `""` |  |
 | tolerations | list | `[]` |  |

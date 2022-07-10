@@ -56,7 +56,8 @@ readinessProbe:
   timeoutSeconds: 5
 
 serviceAccount:
-  create: true
+  create: false
+  autoMountServiceAccountToken: false
   annotations: {}
   name: ""
 
