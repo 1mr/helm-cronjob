@@ -113,11 +113,12 @@ Change the values according to the need of the environment in ``values.yaml`` fi
 | rollingUpdate.maxSurge | int | `1` |  |
 | rollingUpdate.maxUnavailable | int | `1` |  |
 | securityContext.runAsNonRoot | bool | `true` |  |
+| service.autoMountServiceAccountToken | bool | `false` |  |
 | service.containerPort | int | `3000` |  |
 | service.port | int | `80` |  |
 | service.type | string | `"ClusterIP"` |  |
 | serviceAccount.annotations | object | `{}` |  |
-| serviceAccount.autoMountServiceAccountToken | bool | `false` |  |
+| serviceAccount.autoMountServiceAccountToken | bool | `true` |  |
 | serviceAccount.create | bool | `false` |  |
 | serviceAccount.name | string | `""` |  |
 | tolerations | list | `[]` |  |
