@@ -62,6 +62,7 @@ Change the values according to the need of the environment in ``values.yaml`` fi
 | application.env.PORT | string | `"3000"` |  |
 | application.env.TZ | string | `"UTC"` |  |
 | application.secret | string | `nil` |  |
+| autoMountServiceAccountToken | bool | `false` |  |
 | autoscaling.enabled | bool | `true` |  |
 | autoscaling.maxReplicas | int | `3` |  |
 | autoscaling.minReplicas | int | `2` |  |
@@ -113,7 +114,6 @@ Change the values according to the need of the environment in ``values.yaml`` fi
 | rollingUpdate.maxSurge | int | `1` |  |
 | rollingUpdate.maxUnavailable | int | `1` |  |
 | securityContext.runAsNonRoot | bool | `true` |  |
-| service.autoMountServiceAccountToken | bool | `false` |  |
 | service.containerPort | int | `3000` |  |
 | service.port | int | `80` |  |
 | service.type | string | `"ClusterIP"` |  |
