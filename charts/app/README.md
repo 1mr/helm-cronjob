@@ -111,8 +111,6 @@ Change the values according to the need of the environment in ``values.yaml`` fi
 | resources.limits.memory | string | `"256Mi"` |  |
 | resources.requests.cpu | string | `"100m"` |  |
 | resources.requests.memory | string | `"64Mi"` |  |
-| rollingUpdate.maxSurge | int | `1` |  |
-| rollingUpdate.maxUnavailable | int | `1` |  |
 | securityContext.runAsNonRoot | bool | `true` |  |
 | service.containerPort | int | `3000` |  |
 | service.port | int | `80` |  |
@@ -121,4 +119,6 @@ Change the values according to the need of the environment in ``values.yaml`` fi
 | serviceAccount.autoMountServiceAccountToken | bool | `true` |  |
 | serviceAccount.create | bool | `false` |  |
 | serviceAccount.name | string | `""` |  |
+| strategy.rollingUpdate.maxSurge | int | `1` |  |
+| strategy.rollingUpdate.maxUnavailable | int | `1` |  |
 | tolerations | list | `[]` |  |

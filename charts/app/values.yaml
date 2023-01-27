@@ -5,15 +5,15 @@ image:
 imagePullSecrets: []
 
 # -- Name Ovverride
-nameOverride: ""
+nameOverride: ''
 
 application:
   secret:
   env:
-    NODE_ENV: "production"
-    TZ: "UTC"
-    LOG_LEVEL: "INFO"
-    PORT: "3000"
+    NODE_ENV: 'production'
+    TZ: 'UTC'
+    LOG_LEVEL: 'INFO'
+    PORT: '3000'
 
 service:
   type: ClusterIP
@@ -32,9 +32,10 @@ grpcService:
 #     exec:
 #       command: ["/bin/sleep", "20"]
 
-rollingUpdate:
-  maxSurge: 1
-  maxUnavailable: 1
+strategy:
+  rollingUpdate:
+    maxSurge: 1
+    maxUnavailable: 1
 
 autoscaling:
   enabled: true
@@ -45,13 +46,13 @@ autoscaling:
 
 livenessProbe:
   type: http
-  path: "/healthz"
+  path: '/healthz'
   periodSeconds: 15
   timeoutSeconds: 5
 
 readinessProbe:
   type: http
-  path: "/readiness"
+  path: '/readiness'
   periodSeconds: 10
   timeoutSeconds: 5
 
@@ -61,7 +62,7 @@ serviceAccount:
   create: false
   autoMountServiceAccountToken: true
   annotations: {}
-  name: ""
+  name: ''
 
 securityContext:
   # fsGroup: 65533
@@ -90,14 +91,14 @@ ingress:
   enabled: false
   annotations:
     kubernetes.io/ingress.class: nginx
-    kubernetes.io/tls-acme: "false"
-    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-  pathType: "ImplementationSpecific"
+    kubernetes.io/tls-acme: 'false'
+    nginx.ingress.kubernetes.io/force-ssl-redirect: 'true'
+  pathType: 'ImplementationSpecific'
   hosts:
     - host: app.lvh.me
       paths:
-        - "/ping"
-        - "/ok"
+        - '/ping'
+        - '/ok'
   tls:
     enabled: false
 
@@ -118,14 +119,13 @@ containers:
 canary:
   nginx:
     enabled: false
-    cookie: ""
+    cookie: ''
     header: {}
   flagger:
     enabled: false
     # provider: nginx
     analysis: {}
     thresholds: {}
-
 # job:
 #   - name: job-whoami
 #     schedule: "* * * * *"
