@@ -57,10 +57,7 @@ Change the values according to the need of the environment in ``values.yaml`` fi
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| application.env.LOG_LEVEL | string | `"INFO"` |  |
-| application.env.NODE_ENV | string | `"production"` |  |
-| application.env.PORT | string | `"3000"` |  |
-| application.env.TZ | string | `"UTC"` |  |
+| application.env | string | `nil` |  |
 | application.secret | string | `nil` |  |
 | autoMountServiceAccountToken | bool | `false` |  |
 | autoscaling.enabled | bool | `true` |  |
@@ -113,6 +110,7 @@ Change the values according to the need of the environment in ``values.yaml`` fi
 | resources.requests.memory | string | `"64Mi"` |  |
 | securityContext.runAsNonRoot | bool | `true` |  |
 | service.containerPort | int | `3000` |  |
+| service.enabled | bool | `false` |  |
 | service.port | int | `80` |  |
 | service.type | string | `"ClusterIP"` |  |
 | serviceAccount.annotations | object | `{}` |  |
