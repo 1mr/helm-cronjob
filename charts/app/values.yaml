@@ -11,7 +11,7 @@ application:
   secret:
   env:
 
-envFrom:
+env:
   # - name: POD_IP
   #   valueFrom:
   #     fieldRef:

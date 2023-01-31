@@ -58,11 +58,12 @@ spec:
           lifecycle:
             {{- toYaml .Values.lifecycle | nindent 12 }}
           {{- end }}
-          {{- if or .Values.application.secret .Values.application.env .Values.application.envFrom }}
-          envFrom:
-          {{- with .Values.envFrom }}
+          {{- with .Values.env }}
+          env:
             {{- toYaml . | nindent 12 }}
           {{- end }}
+          {{- if or .Values.application.secret .Values.application.env}}
+          envFrom:
           {{- if .Values.application.secret }}
           - secretRef:
               name: {{ .Values.application.secret }}
