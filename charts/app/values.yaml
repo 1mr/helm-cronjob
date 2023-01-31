@@ -11,6 +11,12 @@ application:
   secret:
   env:
 
+envFrom:
+  # - name: POD_IP
+  #   valueFrom:
+  #     fieldRef:
+  #       fieldPath: status.podIP
+
 service:
   enabled: false
   type: ClusterIP

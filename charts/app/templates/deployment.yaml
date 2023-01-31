@@ -60,7 +60,7 @@ spec:
           {{- end }}
           {{- if or .Values.application.secret .Values.application.env .Values.application.envFrom }}
           envFrom:
-          {{- with .Values.application.envFrom }}
+          {{- with .Values.envFrom }}
             {{- toYaml . | nindent 12 }}
           {{- end }}
           {{- if .Values.application.secret }}
