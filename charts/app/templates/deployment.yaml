@@ -50,7 +50,7 @@ spec:
             {{- toYaml .Values.podSecurityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.imagepullPolicy | default "IfNotPresent" | quote }}
-          {{- with .Values.containers.command }}
+          {{- with .Values.command }}
           command:
             {{- toYaml . | nindent 12 }}
           {{- end }}
