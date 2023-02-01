@@ -1,6 +1,7 @@
 {{- if .Values.extraContainer -}}
 {{- range $extraContainer := .Values.extraContainer }}
 {{- if $extraContainer.env }}
+---
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -10,6 +11,18 @@ metadata:
     "helm.sh/hook-weight": "-5"
 data:
   {{ toYaml $extraContainer.env | nindent 2 }}
+{{- end }}
+{{- if $extraContainer.configMap }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ nospace (cat (include "fullname" $) "-" $extraContainer.name "-cm") }}
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade,pre-rollback
+    "helm.sh/hook-weight": "-5"
+data:
+  {{ toYaml $extraContainer.configMap | nindent 2 }}
 {{- end }}
 {{- end }}
 {{- end }}

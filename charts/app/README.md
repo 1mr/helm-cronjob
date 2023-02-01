@@ -71,8 +71,8 @@ Change the values according to the need of the environment in ``values.yaml`` fi
 | canary.nginx.cookie | string | `""` |  |
 | canary.nginx.enabled | bool | `false` |  |
 | canary.nginx.header | object | `{}` |  |
-| containers.command | list | `[]` |  |
 | env | string | `nil` |  |
+| extraContainer | string | `nil` |  |
 | grpcService.containerPort | int | `50051` |  |
 | grpcService.enabled | bool | `false` |  |
 | grpcService.port | int | `40000` |  |
