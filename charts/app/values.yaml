@@ -61,6 +61,12 @@ readinessProbe:
 
 autoMountServiceAccountToken: false
 
+# -- Secrets Store CSI Driver
+secretsStore:
+  enabled: false
+  provider: vault
+  parameters:
+
 serviceAccount:
   create: false
   autoMountServiceAccountToken: true
