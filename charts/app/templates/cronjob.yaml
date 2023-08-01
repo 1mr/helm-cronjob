@@ -26,7 +26,7 @@ spec:
           {{- if $cronjob.env  }}
             checksum/cronjobCM: {{ include (print $.Template.BasePath "/cronjobConfigMap.yaml") $ | sha256sum }}
           {{- end }}
-          {{- if and $cronjob.useAppSecret $.Values.application.env }}
+          {{- if and $cronjob.useAppEnv $.Values.application.env }}
             checksum/configmap: {{ include (print $.Template.BasePath "/configmap.yaml") $ | sha256sum }}
           {{- end }}
           {{- end }}
