@@ -59,8 +59,6 @@ readinessProbe:
   periodSeconds: 10
   timeoutSeconds: 5
 
-autoMountServiceAccountToken: false
-
 # -- Secrets Store CSI Driver
 secretsStore:
   enabled: false
@@ -69,7 +67,7 @@ secretsStore:
 
 serviceAccount:
   create: false
-  autoMountServiceAccountToken: true
+  autoMountServiceAccountToken: false
   annotations: {}
   name: ''
 

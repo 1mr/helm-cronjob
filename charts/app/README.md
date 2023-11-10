@@ -59,7 +59,6 @@ Change the values according to the need of the environment in ``values.yaml`` fi
 |-----|------|---------|-------------|
 | application.env | string | `nil` |  |
 | application.secret | string | `nil` |  |
-| autoMountServiceAccountToken | bool | `false` |  |
 | autoscaling.enabled | bool | `true` |  |
 | autoscaling.maxReplicas | int | `3` |  |
 | autoscaling.minReplicas | int | `2` |  |
@@ -117,7 +116,7 @@ Change the values according to the need of the environment in ``values.yaml`` fi
 | service.port | int | `80` |  |
 | service.type | string | `"ClusterIP"` |  |
 | serviceAccount.annotations | object | `{}` |  |
-| serviceAccount.autoMountServiceAccountToken | bool | `true` |  |
+| serviceAccount.autoMountServiceAccountToken | bool | `false` |  |
 | serviceAccount.create | bool | `false` |  |
 | serviceAccount.name | string | `""` |  |
 | strategy.rollingUpdate.maxSurge | int | `1` |  |
