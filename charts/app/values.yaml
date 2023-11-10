@@ -64,6 +64,7 @@ secretsStore:
   enabled: false
   provider: vault
   parameters:
+  secretObjects:
 
 serviceAccount:
   create: false

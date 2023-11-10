@@ -109,7 +109,7 @@ Change the values according to the need of the environment in ``values.yaml`` fi
 | resources.limits.memory | string | `"256Mi"` |  |
 | resources.requests.cpu | string | `"100m"` |  |
 | resources.requests.memory | string | `"64Mi"` |  |
-| secretsStore | object | `{"enabled":false,"parameters":null,"provider":"vault"}` | Secrets Store CSI Driver |
+| secretsStore | object | `{"enabled":false,"parameters":null,"provider":"vault","secretObjects":null}` | Secrets Store CSI Driver |
 | securityContext.runAsNonRoot | bool | `true` |  |
 | service.containerPort | int | `3000` |  |
 | service.enabled | bool | `false` |  |
