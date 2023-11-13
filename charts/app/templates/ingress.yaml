@@ -36,6 +36,9 @@ metadata:
 
 {{- end }}
 spec:
+{{- if .Values.ingress.ingressClassName }}
+  ingressClassName: {{ .Values.ingress.ingressClassName }}
+{{- end }}
 {{- if and .Values.ingress.tls.enabled .Values.ingress.hosts }}
   tls:
   - hosts:

@@ -98,9 +98,10 @@ tolerations: []
 ingress:
   enabled: false
   annotations:
-    kubernetes.io/ingress.class: nginx
-    kubernetes.io/tls-acme: 'false'
-    nginx.ingress.kubernetes.io/force-ssl-redirect: 'true'
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: 'false'
+    # nginx.ingress.kubernetes.io/force-ssl-redirect: 'true'
+  ingressClassName: nginx
   pathType: 'ImplementationSpecific'
   hosts:
     - host: app.lvh.me

@@ -78,13 +78,12 @@ Change the values according to the need of the environment in ``values.yaml`` fi
 | grpcService.port | int | `40000` |  |
 | image | object | `{"repository":"1am3r/hello-world-koa","tag":"v.0.1"}` | Image to use for deploying |
 | imagePullSecrets | list | `[]` |  |
-| ingress.annotations."kubernetes.io/ingress.class" | string | `"nginx"` |  |
-| ingress.annotations."kubernetes.io/tls-acme" | string | `"false"` |  |
-| ingress.annotations."nginx.ingress.kubernetes.io/force-ssl-redirect" | string | `"true"` |  |
+| ingress.annotations | string | `nil` |  |
 | ingress.enabled | bool | `false` |  |
 | ingress.hosts[0].host | string | `"app.lvh.me"` |  |
 | ingress.hosts[0].paths[0] | string | `"/ping"` |  |
 | ingress.hosts[0].paths[1] | string | `"/ok"` |  |
+| ingress.ingressClassName | string | `"nginx"` |  |
 | ingress.pathType | string | `"ImplementationSpecific"` |  |
 | ingress.tls.enabled | bool | `false` |  |
 | livenessProbe.path | string | `"/healthz"` |  |
